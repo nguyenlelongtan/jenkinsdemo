@@ -16,7 +16,11 @@ pipeline {
 
     parameters {
       string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Define branch name')
-      string(name: 'ACCOUNT_ID', defaultValue: '', description: 'AccountId')
+      string(name: 'ACCOUNT_ID', defaultValue: '', description: 'ACCOUNT_ID')
+      string(name: 'DEPLOYER_ROLE', defaultValue: '', description: 'DEPLOYER_ROLE')
+      string(name: 'S3_BUCKET_URL_CONFIG', defaultValue: '', description: 'S3_BUCKET_URL_CONFIG')
+      string(name: 'S3_BUCKET_URL_STATIC_WEB', defaultValue: '', description: 'S3_BUCKET_URL_STATIC_WEB')
+      string(name: 'AWS_REGION', defaultValue: '', description: 'AWS_REGION')
       choice(name: 'DEPLOY_ENV', choices: ['dev','staging','prod'], description: 'Define environment name')
     }
 
@@ -72,6 +76,31 @@ pipeline {
                    }
                }
            }
+        }
+
+        stage("STEP 2: Update/Deploy MDE oD WebUI") {
+            when {
+              expression {
+                currentBuild.result == null || currentBuild.result == 'SUCCESS'
+              }
+            }
+            steps {
+                withAWS(region: "${params.AWS_REGION}", role: "arn:aws:iam::${ACCOUNT_ID}:role/${params.DEPLOYER_ROLE}") {
+                  sh """
+                  rm -rf webui
+                  mkdir webui
+                  npm install
+                  cp -a build/. webui
+                  """
+
+                  zip dir: "webui", zipFile: "webui.0.${env.BUILD_NUMBER}.zip", archive: true
+
+                  sh """
+                  aws s3 sync --sse AES256 --exclude "*" --include "*.zip" ${env.WORKSPACE}/ "${params.S3_BUCKET_URL_CONFIG}/"
+                  aws s3 sync --sse AES256 build "${params.S3_BUCKET_URL_STATIC_WEB}"
+                  """
+                }
+            }
         }
     }
     post {
