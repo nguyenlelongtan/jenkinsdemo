@@ -25,7 +25,7 @@ pipeline {
     }
 
     environment {
-        GIT_URL    = 'https://github.com/nguyenlelongtan/'
+        GIT_URL    = 'https://github.com/nguyenlelongtan'
         GIT_REPO   = 'jenkinsdemo.git'
         GIT_CREDS  = 'tannll-account-github'
     }
