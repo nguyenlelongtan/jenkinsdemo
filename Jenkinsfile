@@ -21,8 +21,8 @@ pipeline {
       string(name: 'S3_BUCKET_URL_CONFIG', defaultValue: '', description: 'S3_BUCKET_URL_CONFIG')
       string(name: 'S3_BUCKET_URL_STATIC_WEB', defaultValue: '', description: 'S3_BUCKET_URL_STATIC_WEB')
       string(name: 'AWS_REGION', defaultValue: '', description: 'AWS_REGION')
-      string(name: 'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS_ACCESS_KEY_ID')
-      string(name: 'AWS_SECRET_KEY', defaultValue: '', description: 'AWS_SECRET_KEY')
+    //   string(name: 'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS_ACCESS_KEY_ID')
+    //   string(name: 'AWS_SECRET_KEY', defaultValue: '', description: 'AWS_SECRET_KEY')
 
       choice(name: 'DEPLOY_ENV', choices: ['dev','staging','prod'], description: 'Define environment name')
     }
