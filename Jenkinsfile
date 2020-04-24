@@ -16,6 +16,7 @@ pipeline {
 
     parameters {
       string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Define branch name')
+      string(name: 'ACCOUNT_ID', defaultValue: '', description: 'AccountId')
       choice(name: 'DEPLOY_ENV', choices: ['dev','staging','prod'], description: 'Define environment name')
     }
 
@@ -52,6 +53,25 @@ pipeline {
                 }
                 echo 'Continue'
             }
+        }
+
+        stage("STEP 1: Get ACCOUNT_ID") {
+           when {
+             expression {
+               currentBuild.result == null || currentBuild.result == 'SUCCESS'
+             }
+           }
+           steps {
+               script {
+                   if ("${params.DEPLOY_ENV}" == 'dev') {
+                       ACCOUNT_ID = params.ACCOUNT_ID
+                   } else if ("${params.DEPLOY_ENV}" == 'staging') {
+                       ACCOUNT_ID = params.ACCOUNT_ID
+                   } else if ("${params.DEPLOY_ENV}" == 'prod') {
+                       ACCOUNT_ID = params.ACCOUNT_ID
+                   }
+               }
+           }
         }
     }
     post {
