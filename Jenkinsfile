@@ -31,8 +31,8 @@ pipeline {
         GIT_URL    = 'https://github.com/nguyenlelongtan'
         GIT_REPO   = 'jenkinsdemo.git'
         GIT_CREDS  = 'tannll-account-github'
-        AWS_ACCESS_KEY_ID = params.AWS_ACCESS_KEY_ID
-        AWS_SECRET_KEY = params.AWS_SECRET_KEY
+        AWS_ACCESS_KEY_ID = "${params.AWS_ACCESS_KEY_ID}"
+        AWS_SECRET_KEY = "${params.AWS_SECRET_KEY}"
     }
 
     stages {
