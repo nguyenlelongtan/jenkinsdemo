@@ -21,9 +21,6 @@ pipeline {
       string(name: 'S3_BUCKET_URL_CONFIG', defaultValue: '', description: 'S3_BUCKET_URL_CONFIG')
       string(name: 'S3_BUCKET_URL_STATIC_WEB', defaultValue: '', description: 'S3_BUCKET_URL_STATIC_WEB')
       string(name: 'AWS_REGION', defaultValue: '', description: 'AWS_REGION')
-    //   string(name: 'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS_ACCESS_KEY_ID')
-    //   string(name: 'AWS_SECRET_KEY', defaultValue: '', description: 'AWS_SECRET_KEY')
-
       choice(name: 'DEPLOY_ENV', choices: ['dev','staging','prod'], description: 'Define environment name')
     }
 
@@ -31,8 +28,6 @@ pipeline {
         GIT_URL    = 'https://github.com/nguyenlelongtan'
         GIT_REPO   = 'jenkinsdemo.git'
         GIT_CREDS  = 'tannll-account-github'
-        AWS_ACCESS_KEY_ID = "${params.AWS_ACCESS_KEY_ID}"
-        AWS_SECRET_KEY = "${params.AWS_SECRET_KEY}"
     }
 
     stages {
@@ -90,7 +85,7 @@ pipeline {
               }
             }
             steps {
-                withAWS(region: "${params.AWS_REGION}", role: "arn:aws:iam::${ACCOUNT_ID}:role/${params.DEPLOYER_ROLE}") {
+                withAWS(region: "${params.AWS_REGION}", credentials: 'dev-tannll-credential') {
                   sh """
                   rm -rf webui
                   mkdir webui
