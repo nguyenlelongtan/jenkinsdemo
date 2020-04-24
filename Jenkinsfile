@@ -1,8 +1,12 @@
 #!/usr/bin/env groovy
 
 pipeline {
-    agent { label 'agent-alpine-node-py-stable-xl' }
-
+    agent {
+      docker {
+        image 'node:6-alpine'
+        args '-p 3000:3000'
+      }
+    }
     options {
       skipStagesAfterUnstable()
       disableConcurrentBuilds()
